@@ -5,18 +5,18 @@ const fs = require('fs');
 const multer = require('multer');
 const axios = require('axios');
 const FormData = require('form-data');
-const moment = require('moment-timezone'); // Using moment-timezone for robust timezone handling
+const moment = require('moment-timezone');
 const app = express();
 const port = 3000;
 
-let rfidReaderMode = 'entry'; // 'entry' or 'exit'. Default to 'entry'.
-const MIN_PARK_DURATION_MS = 30 * 1000; // 30 seconds
+let rfidReaderMode = 'entry'; // Default mode
+const MIN_PARK_DURATION_MS = 30 * 1000;
 
 const sseClients = []; // Store connected SSE clients
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Hỗ trợ parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true })); // parse URL-encoded bodies
 app.use(express.static(path.join(__dirname, '..', 'front_end')));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); // For local development
@@ -269,19 +269,19 @@ app.get('/api/rfid-request', async (req, res) => {
         });
       }
 
-      const rfidRequestInitiatedTime = Date.now(); // Ghi nhận thời điểm bắt đầu xử lý RFID này
+      const rfidRequestInitiatedTime = Date.now(); // Capture the time when the request was initiated
       sendSseEvent({ type: 'TRIGGER_CAPTURE', cameraType: 'entry' });
       console.log('Sent TRIGGER_CAPTURE event for entry camera. Waiting for plate data...'); 
 
       let plateDataForThisRequest = null;
-      const maxWaitDurationMs = 8000; // Chờ tối đa 8 giây cho dữ liệu biển số
-      const pollingIntervalMs = 200;  // Kiểm tra mỗi 200ms
+      const maxWaitDurationMs = 8000;
+      const pollingIntervalMs = 200;
       let timeWaitedMs = 0;
 
       while (timeWaitedMs < maxWaitDurationMs) {
-        // Kiểm tra xem latestEntryPlateData có được cập nhật kể từ khi yêu cầu RFID này bắt đầu không
+        // Check if the plate data is available and if it was received after the request was initiated
         if (latestEntryPlateData.plate && latestEntryPlateData.timestamp >= rfidRequestInitiatedTime) {
-          plateDataForThisRequest = { ...latestEntryPlateData }; // Tạo bản sao dữ liệu biển số cho yêu cầu này
+          plateDataForThisRequest = { ...latestEntryPlateData }; // Create a copy of the plate data
           console.log(`Plate data received after ${timeWaitedMs}ms: ${plateDataForThisRequest.plate}`);
           break; // Thoát vòng lặp khi có dữ liệu
         }
@@ -294,9 +294,9 @@ app.get('/api/rfid-request', async (req, res) => {
         return res.json({ openGate: false, message: 'Hết giờ chờ nhận diện BS hoặc không nhận diện được BS.', slots: currentSlots });
       }
 
-      const currentPlateData = plateDataForThisRequest; // Sử dụng dữ liệu biển số đã chụp cho yêu cầu này
+      const currentPlateData = plateDataForThisRequest; // Use the plate data received
 
-      // Kiểm tra xem có biển số hợp lệ không (không phải null, không phải "NoPlate")
+      // Check if the plate data is valid
       if (!currentPlateData.plate || currentPlateData.plate === 'NoPlate') { 
         console.log('No valid plate string found even after waiting for this request.'); 
         return res.json({ openGate: false, message: 'Không nhận diện được biển số xe vào.', slots: currentSlots });
@@ -327,8 +327,8 @@ app.get('/api/rfid-request', async (req, res) => {
             slots: currentSlots 
         });
       }
-      // If latestRecordByPlate is null, or its status is 'out', proceed.
-      
+
+      // If the vehicle is not already in, proceed to save the new entry      
       const newParkingRecord = new ParkingHistory({
         rfidTag: normalizedRfidUid,
         licensePlate: recognizedPlate, 
@@ -339,7 +339,7 @@ app.get('/api/rfid-request', async (req, res) => {
       await newParkingRecord.save();
       console.log(`New vehicle entry recorded: ${recognizedPlate}, RFID: ${normalizedRfidUid}. Entry Time (UTC): ${newParkingRecord.entryTime.toISOString()}`); 
 
-      latestEntryPlateData = { plate: null, timestamp: 0, imagePath: null }; // Xóa dữ liệu biển số tạm thời sau khi sử dụng
+      latestEntryPlateData = { plate: null, timestamp: 0, imagePath: null }; // Clear the entry plate data after processing
 
       return res.json({
         openGate: true,
@@ -374,7 +374,7 @@ app.get('/api/rfid-request', async (req, res) => {
       console.log('Sent TRIGGER_CAPTURE event for exit camera. Waiting for exit plate data...');
 
       let exitPlateDataForThisRequest = null;
-      const maxWaitDurationMs = 8000; // Chờ tối đa 8 giây
+      const maxWaitDurationMs = 8000;
       const pollingIntervalMs = 200;
       let timeWaitedMs = 0;
 
@@ -421,8 +421,8 @@ app.get('/api/rfid-request', async (req, res) => {
         sendSseEvent({
           type: 'PLATE_EXIT_MISMATCH_RFID',
           rfidTag: normalizedRfidUid,
-          expectedPlate: parkingRecordToExit.licensePlate, // Gửi biển số gốc (chưa chuẩn hóa) cho dễ đọc
-          recognizedPlate: recognizedExitPlate, // Gửi biển số nhận diện được
+          expectedPlate: parkingRecordToExit.licensePlate, // Send expected plate
+          recognizedPlate: recognizedExitPlate, // Send recognized plate
           imageFile: exitImagePath ? `/uploads/${exitImagePath}` : null
         });
         return res.json({
@@ -445,8 +445,8 @@ app.get('/api/rfid-request', async (req, res) => {
       await parkingRecordToExit.save();
 
       console.log(`[NodeJS] Vehicle exited (RFID+Camera): ${parkingRecordToExit.licensePlate} (RFID: ${normalizedRfidUid}). Fee: ${parkingRecordToExit.fee}. Exit Time (UTC): ${parkingRecordToExit.exitTime.toISOString()}`);
-      
-      sendSseEvent({ // Sử dụng lại PLATE_EXIT_CAPTURED vì frontend đã xử lý nó tốt
+
+      sendSseEvent({ // Reuse PLATE_EXIT_CAPTURED
         type: 'PLATE_EXIT_CAPTURED',
         plate: parkingRecordToExit.licensePlate,
         rfidTag: parkingRecordToExit.rfidTag,

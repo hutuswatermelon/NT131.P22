@@ -112,7 +112,7 @@ function initializeEventSource() {
         document.getElementById('fee').textContent = `Phí Gửi Xe: -- VND`;
         checkPlateMatch();
         fetchParkingData(); // Refresh list
-      } else if (eventData.type === 'PLATE_EXIT_IMAGE_PROCESSED') { // Ảnh xe ra vừa được upload (chưa xác nhận)
+      } else if (eventData.type === 'PLATE_EXIT_IMAGE_PROCESSED') { // Picture of vehicle leaving
         console.log('Exit plate image processed (from /api/upload, pre-RFID check):', eventData);
         const plateOutTextEl = document.getElementById('plateOutText');
         if (plateOutTextEl) plateOutTextEl.textContent = eventData.plate || '--';
@@ -142,7 +142,7 @@ function initializeEventSource() {
             const imageUrl = `${API_BASE}${eventData.imageFile}`;
             if (plateOutImgEl) plateOutImgEl.src = imageUrl;
             if (vehicleImgOutEl) vehicleImgOutEl.src = imageUrl;
-        } else { // Nếu là RFID_VEHICLE_EXITED (không có ảnh) hoặc không có imageFile
+        } else { // If no image file, set to a placeholder or blank
             if (plateOutImgEl) plateOutImgEl.src = "#"; 
             if (vehicleImgOutEl) vehicleImgOutEl.src = "#"; 
         }
@@ -162,8 +162,7 @@ function initializeEventSource() {
             matchStatusEl.textContent = `✘ BIỂN SỐ RA KHÔNG KHỚP! Mong đợi: ${eventData.expectedPlate}, Nhận diện: ${eventData.recognizedPlate}`;
             matchStatusEl.style.color = 'red';
         }
-        // Ảnh xe ra (recognized) đã được cập nhật bởi PLATE_EXIT_IMAGE_PROCESSED
-        // Có thể thêm thông báo alert
+        // Picture of the vehicle leaving may be empty or the last captured image
         alert(`Lỗi Xe Ra: Biển số không khớp.\nMong đợi: ${eventData.expectedPlate}\nNhận diện: ${eventData.recognizedPlate}`);
       } else if (eventData.type === 'PLATE_EXIT_NO_PLATE_DATA_RFID') {
         console.log('No Plate Data for Exit (RFID check):', eventData);
@@ -378,7 +377,6 @@ async function uploadImage(blob, type) {
     console.error(`Error uploading image (${type}):`, e);
     const textId = type === 'entry' ? 'plateInText' : 'plateOutText';
     document.getElementById(textId).textContent = 'Lỗi Tải Lên';
-    // Optionally display e.message or a generic error to the user
   }
 }
 
@@ -393,8 +391,8 @@ function handleResult(data, type, blob) {
 
   if (plateTextEl) plateTextEl.textContent = data.licensePlate || '--';
   
-  // URL.createObjectURL nên được gọi ở đây vì blob chỉ tồn tại trong scope này
-  // và sẽ được SSE PLATE_ENTRY_CAPTURED hoặc PLATE_EXIT_IMAGE_PROCESSED ghi đè nếu có imageFile từ server
+  // URL.createObjectURL(blob) creates a temporary URL for the blob
+  // This URL should be revoked after use to free up memory
   let localBlobUrl = null;
   if (blob) {
     localBlobUrl = URL.createObjectURL(blob);
