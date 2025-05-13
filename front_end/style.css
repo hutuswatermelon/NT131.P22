@@ -1,0 +1,420 @@
+body {
+    font-family: Helvetica, sans-serif;
+    background-color: #e6f0f7;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+    line-height: 1.6; /* Cải thiện khả năng đọc */
+}
+
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+}
+
+header {
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    padding: 15px 0; /* Tăng padding */
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+    display: flex; /* Added for aligning header items */
+    justify-content: space-between; /* Distribute space */
+    align-items: center; /* Vertically align items */
+}
+
+/* Add a wrapper for right-side buttons if needed for specific alignment */
+header > div {
+    display: flex;
+    align-items: center;
+}
+
+body.dark-mode header {
+    background-color: #2c3e50;
+}
+
+.header-btn { /* Common style for header buttons */
+    background: white;
+    color: #333;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 0 15px; /* Add some margin */
+}
+
+body.dark-mode .header-btn {
+    background: #444;
+    color: #fff;
+}
+
+#rfidModeToggleBtn {
+    /* Specific styles if needed, otherwise uses .header-btn */
+    /* Example: order: -1; to push to left if flex direction is row */
+}
+#rfidModeToggleBtn.exit-mode { /* Style for when mode is 'exit' */
+    background-color: #d9534f; /* Red */
+    color: white;
+}
+body.dark-mode #rfidModeToggleBtn.exit-mode {
+    background-color: #c9302c; /* Darker red */
+}
+
+#manualOpenGateBtn {
+    /* Uses .header-btn styles by default */
+    /* Add specific styles if needed, e.g., different color */
+    background-color: #f0ad4e; /* Orange color for warning/manual action */
+    color: white;
+}
+body.dark-mode #manualOpenGateBtn {
+    background-color: #ec971f;
+}
+
+#darkModeToggle {
+    background: white;
+    color: #333;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+body.dark-mode #darkModeToggle {
+    background: #444;
+    color: #fff;
+}
+
+/* RFID Mode Status bar below header */
+#rfidModeStatusContainer {
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 8px 0;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+body.dark-mode #rfidModeStatusContainer {
+    background-color: #2a2a2a;
+    border-bottom: 1px solid #444;
+    color: #ccc;
+}
+#rfidModeStatus {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.container {
+    display: grid;
+    /* Mặc định cho màn hình lớn hơn */
+    grid-template-columns: repeat(3, 1fr); /* 3 cột bằng nhau */
+    gap: 15px; /* Tăng gap */
+    padding: 15px;
+}
+
+/* Kiểu chung cho các widget box */
+.widget-box {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Phân bổ không gian */
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 200px; /* Chiều cao tối thiểu cho các box */
+}
+
+body.dark-mode .widget-box {
+    background-color: #3a3a3a; /* Màu nền tối hơn cho widget */
+    color: #f0f0f0;
+    border-color: #555;
+}
+
+h2.section-title {
+    font-size: 18px; /* Giảm kích thước một chút cho cân đối */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0; /* Xóa margin top mặc định */
+    margin-bottom: 10px; /* Khoảng cách với nội dung bên dưới */
+    color: #333;
+    width: 100%; /* Đảm bảo tiêu đề chiếm hết chiều rộng */
+}
+
+body.dark-mode h2.section-title {
+    color: #e0e0e0;
+}
+
+/* Live Camera Widget */
+.live-camera-widget .camera-feed {
+    width: 100%;
+    flex-grow: 1; /* Cho phép video chiếm không gian còn lại */
+    background-color: #000; /* Nền đen cho video */
+    border-radius: 5px;
+    overflow: hidden; /* Đảm bảo video không tràn ra ngoài */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px; /* Chiều cao tối thiểu cho vùng video */
+}
+.live-camera-widget video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.live-camera-widget button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px; /* Khoảng cách với video */
+    font-size: 14px;
+}
+body.dark-mode .live-camera-widget button {
+    background-color: #2980b9;
+}
+
+/* Image Display Widget */
+.image-display-widget img {
+    width: 100%;
+    max-height: 200px; /* Giới hạn chiều cao ảnh */
+    object-fit: contain; /* Hiển thị toàn bộ ảnh, không cắt xén */
+    border-radius: 5px;
+    margin-top: 5px;
+    flex-grow: 1;
+}
+
+/* License Plate Widget */
+.license-plate-widget .plate-details {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+.license-plate-widget .plate-block {
+    text-align: center;
+    margin: 5px;
+}
+.license-plate-widget .plate-block img {
+    width: 100px;
+    height: auto; /* Giữ tỷ lệ khung hình */
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+body.dark-mode .license-plate-widget .plate-block img {
+    border-color: #444;
+}
+.license-plate-widget .plate-text {
+    font-size: 18px; /* Giảm kích thước một chút */
+    font-weight: bold;
+}
+.license-plate-widget .matched {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 10px;
+    font-size: 16px;
+}
+
+/* Parking Session Info Widget */
+.parking-session-info-widget div {
+    margin: 5px 0;
+    font-size: 16px;
+}
+.parking-session-info-widget .time {
+    font-size: 22px;
+    color: #0066ff;
+    font-weight: bold;
+}
+body.dark-mode .parking-session-info-widget .time {
+    color: #66aaff;
+}
+.parking-session-info-widget .fee {
+    color: red;
+    font-weight: bold;
+}
+body.dark-mode .parking-session-info-widget .fee {
+    color: #ff6b6b;
+}
+#dateInfo, #duration, #fee { /* Áp dụng chung */
+    font-size: 16px;
+    font-weight: normal;
+}
+#dateInfo { font-weight: bold; }
+
+
+/* Parking Slots Status Widget */
+.parking-slots-status-widget {
+    justify-content: flex-start; /* Căn tiêu đề lên trên */
+    min-height: 100px; /* Chiều cao tối thiểu cho widget */
+}
+#parkingStatus {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 5px;
+    flex-direction: column; /* Xếp các ô theo chiều dọc */
+    align-items: center; /* Căn giữa các ô */
+}
+.parking-slots-status-widget    .slot {
+    flex: 1 1 auto; /* Cho phép các slot co dãn */
+    margin: 5px; /* Khoảng cách giữa các slot */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px; /* Chiều rộng tối thiểu cho mỗi slot */
+}
+.slot {
+  padding: 12px; /* Điều chỉnh padding */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 70px; /* Điều chỉnh chiều rộng */
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px; /* Điều chỉnh font size */
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.slot.available {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  border-color: #a5d6a7;
+}
+.slot.occupied {
+  background-color: #ffcdd2;
+  color: #c62828;
+  border-color: #ef9a9a;
+}
+body.dark-mode .slot.available {
+  background-color: #2c5c2e;
+  color: #a5d6a7;
+  border-color: #388e3c;
+}
+body.dark-mode .slot.occupied {
+  background-color: #7f2e2e;
+  color: #ef9a9a;
+  border-color: #d32f2f;
+}
+
+/* Vehicle List Widget */
+.vehicle-list-widget table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px; /* Giảm font size cho bảng */
+    text-align: center;
+    margin-top: 10px;
+    table-layout: fixed; /* Giúp các cột đều hơn */
+}
+.vehicle-list-widget th, .vehicle-list-widget td {
+    border: 1px solid #ccc;
+    padding: 6px; /* Điều chỉnh padding */
+    word-wrap: break-word; /* Chống tràn chữ */
+}
+body.dark-mode .vehicle-list-widget th, body.dark-mode .vehicle-list-widget td {
+    border-color: #555;
+}
+.btn-clear {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 15px;
+}
+body.dark-mode .btn-clear {
+    background-color: #c0392b;
+}
+
+/* Widget kéo dài toàn bộ chiều rộng */
+.full-width-widget {
+    grid-column: 1 / -1; /* Kéo dài từ cột đầu đến cột cuối */
+}
+
+
+/* --- Media Queries for Responsiveness --- */
+
+/* Cho máy tính bảng và màn hình nhỏ hơn */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr); /* 2 cột */
+    }
+    /* Các widget ở hàng 3 và 4 sẽ tự động chiếm 2 cột */
+    .license-plate-widget, .parking-session-info-widget {
+        grid-column: span 2; /* Cho các widget này chiếm 2 cột để cân đối hơn */
+    }
+     .live-camera-widget, .image-display-widget {
+        /* Có thể cần điều chỉnh chiều cao tối thiểu ở đây nếu muốn */
+    }
+}
+
+/* Cho điện thoại di động */
+@media (max-width: 767px) {
+    .container {
+        grid-template-columns: 1fr; /* 1 cột */
+        gap: 10px;
+        padding: 10px;
+    }
+    .widget-box {
+        min-height: auto; /* Bỏ chiều cao tối thiểu cố định */
+        padding: 10px;
+    }
+    h2.section-title {
+        font-size: 16px;
+    }
+    .live-camera-widget button {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    .license-plate-widget .plate-text {
+        font-size: 16px;
+    }
+    .license-plate-widget .plate-block img {
+        width: 80px;
+    }
+    .parking-session-info-widget .time {
+        font-size: 20px;
+    }
+    .parking-session-info-widget div, #dateInfo, #duration, #fee {
+        font-size: 14px;
+    }
+    .slot {
+        min-width: 60px;
+        padding: 10px;
+        font-size: 12px;
+    }
+    .vehicle-list-widget table {
+        font-size: 12px;
+    }
+    .vehicle-list-widget th, .vehicle-list-widget td {
+        padding: 4px;
+    }
+    .btn-clear {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    #darkModeToggle {
+        padding: 6px 8px;
+        font-size: 12px;
+        right: 10px;
+    }
+    header {
+        padding: 10px 0;
+        font-size: 20px;
+    }
+    /* Đảm bảo các widget đã span 2 ở tablet giờ chỉ span 1 */
+    .license-plate-widget, .parking-session-info-widget {
+        grid-column: span 1;
+    }
+}

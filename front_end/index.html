@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bãi giữ xe</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Thêm viewport meta tag -->
+</head>
+<body>
+    <header>
+        <button id="rfidModeToggleBtn" class="header-btn">Chế độ: VÀO</button>
+        SMART PARKING SYSTEM
+        <div> <!-- Wrapper for right-side buttons -->
+            <button id="manualOpenGateBtn" class="header-btn">Mở Cổng Thủ Công</button>
+            <button id="darkModeToggle" class="header-btn">🌙 Chế độ tối</button>
+        </div>
+    </header>
+    <div id="rfidModeStatusContainer" style="text-align: center; padding: 5px; background-color: #f0f0f0;">
+        <p id="rfidModeStatus" style="margin: 0; font-size: 14px;">Chế độ hiện tại: Ghi nhận xe VÀO.</p>
+    </div>
+
+    <div class="container">
+        <!-- Hàng 1 -->
+        <div class="widget-box live-camera-widget">
+            <h2 class="section-title">Camera Lối Vào</h2>
+            <div class="camera-feed">
+                <video id="liveCamera_1" autoplay playsinline></video>
+            </div>
+            <button id="toggleCamera1">Bật/Tắt Camera Vào</button>
+        </div>
+
+        <div class="widget-box image-display-widget">
+            <h2 class="section-title">Ảnh Xe Vào</h2>
+            <img id="imgIn" src="#" alt="Ảnh Xe Vào">
+        </div>
+
+        <div class="widget-box license-plate-widget">
+            <h2 class="section-title">Thông Tin Biển Số</h2>
+            <div class="plate-details">
+                <div class="plate-block">
+                    <div>Biển Số Vào</div>
+                    <img id="plateInImg" src="#" alt="Biển Số Vào">
+                    <div class="plate-text" id="plateInText">--</div>
+                </div>
+                <div class="plate-block">
+                    <div>Biển Số Ra</div>
+                    <img id="plateOutImg" src="#" alt="Biển Số Ra">
+                    <div class="plate-text" id="plateOutText">--</div>
+                </div>
+            </div>
+            <div class="matched" id="matchStatus">TRẠNG THÁI KHỚP BIỂN SỐ</div>
+        </div>
+
+        <!-- Hàng 2 -->
+        <div class="widget-box live-camera-widget">
+            <h2 class="section-title">Camera Lối Ra</h2>
+            <div class="camera-feed">
+                <video id="liveCamera_2" autoplay playsinline></video>
+            </div>
+            <button id="toggleCamera2">Bật/Tắt Camera Ra</button>
+        </div>
+
+        <div class="widget-box image-display-widget">
+            <h2 class="section-title">Ảnh Xe Ra</h2>
+            <img id="imgOut" src="#" alt="Ảnh Xe Ra">
+        </div>
+
+        <div class="widget-box parking-session-info-widget">
+            <h2 class="section-title">Thông Tin Phiên Gửi Xe</h2>
+            <div id="dateInfo"></div>
+            <div class="time" id="clock">00:00:00</div>
+            <div id="duration">Thời Gian Gửi: --:--:--</div>
+            <div class="fee" id="fee">Phí Gửi Xe: -- VND</div>
+        </div>
+
+        <!-- Hàng 3 - Trạng thái ô đỗ -->
+        <div class="widget-box parking-slots-status-widget full-width-widget">
+            <h2 class="section-title">Trạng Thái Ô Đỗ</h2>
+            <div id="parkingStatus">
+                <!-- Parking slots will be inserted here by JS -->
+            </div>
+        </div>
+
+        <!-- Hàng 4 - Danh sách xe -->
+        <div class="widget-box vehicle-list-widget full-width-widget">
+            <h2 class="section-title">Danh Sách Xe Trong Bãi</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Biển Số Xe</th>
+                        <th>Thời Gian Vào</th>
+                        <th>Thẻ RFID</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+            <button id="clearListBtn" class="btn-clear">Xóa Tất Cả Dữ Liệu Xe & Lịch Sử</button>
+        </div>
+    </div>
+    <script src="frontend.js"></script>
+</body>
+</html>
