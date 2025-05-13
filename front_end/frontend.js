@@ -171,7 +171,6 @@ function initializeEventSource() {
             matchStatusEl.textContent = `✘ KHÔNG NHẬN DIỆN ĐƯỢC BIỂN SỐ XE RA (RFID: ${eventData.rfidTag})`;
             matchStatusEl.style.color = 'red';
         }
-        // Ảnh xe ra có thể trống hoặc là ảnh cuối cùng chụp được
         alert(`Lỗi Xe Ra: Không nhận diện được biển số xe ra cho thẻ RFID ${eventData.rfidTag}. ${eventData.message || ''}`);
       } else if (eventData.type === 'SENSOR_SLOT_UPDATE') {
         console.log('SENSOR_SLOT_UPDATE received:', eventData);
@@ -398,7 +397,7 @@ function handleResult(data, type, blob) {
     localBlobUrl = URL.createObjectURL(blob);
   }
 
-  // Ưu tiên imageFile từ server (nếu có), nếu không thì dùng localBlobUrl
+  // Use the image URL from the server if available, otherwise use the local blob URL
   const imageUrlToDisplay = data.imageFile ? `${API_BASE}${data.imageFile}` : localBlobUrl;
 
   if (imageUrlToDisplay) {
@@ -419,15 +418,6 @@ function handleResult(data, type, blob) {
         if (vehicleImgEl.src && vehicleImgEl.src.startsWith('blob:')) URL.revokeObjectURL(vehicleImgEl.src);
         vehicleImgEl.src = "#";
     }
-  }
-
-
-  if (isEntry) {
-    // Clear exit info if it's a new entry (đã được xử lý bởi PLATE_ENTRY_CAPTURED SSE)
-  } else { // type === 'exit'
-    // Với logic mới, /api/upload cho xe ra không trả về duration/fee.
-    // Thông tin này sẽ được cập nhật bởi PLATE_EXIT_CAPTURED SSE.
-    // Do đó, không cần cập nhật duration/fee ở đây.
   }
 
   checkPlateMatch();
