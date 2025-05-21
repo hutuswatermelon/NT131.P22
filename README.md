@@ -51,3 +51,33 @@ Dự án "Hệ thống bãi đỗ xe tự động" được xây dựng nhằm m
 
 ## Trích dẫn phần Project được sử dụng cho nhận diện biển số
     https://github.com/buiquangmanhhp1999/License-Plate-Recognition
+
+## Hướng phát triển tương lai
+**Phần cứng:**
+ - *Nâng cấp bộ xử lý trung tâm:*
+    - Thay thế ESP8266 bằng ESP32 nhằm cải thiện hiệu suất điều khiển và khả năng xử lý dữ liệu.
+
+- *Mở rộng hệ thống vào/ra:*
+    - Thiết kế hệ thống có 2 cổng vào và 2 cổng ra để tăng lưu lượng xe và tối ưu hóa luồng giao thông.
+
+- *Tích hợp camera AI:*
+    - Nhận diện biển số: Sử dụng camera mini kết hợp với thuật toán học máy để nhận diện biển số xe tự động.
+    - Giám sát toàn bãi xe: Camera giám sát toàn cảnh kết hợp AI nhằm phát hiện và nhận diện chính xác các xe đang đỗ, kể cả khi bị che khuất bởi vật thể khác.
+
+- *Cảm biến môi trường:*
+    - Cảm biến ánh sáng: Tự động bật/tắt hệ thống chiếu sáng theo điều kiện ánh sáng môi trường.
+    - Cảm biến nhiệt: Kết hợp hệ thống cảnh báo và kích hoạt hệ thống phòng cháy chữa cháy khi phát hiện nhiệt độ bất thường.
+
+- *Mở rộng mô hình bãi giữ xe phân tầng:*
+    - Hỗ trợ quản lý bãi xe nhiều tầng, tích hợp bản đồ định vị ô đỗ xe và ghi nhớ vị trí xe đã đỗ.
+
+**Phần mềm:**
+- *Cho quản lý bãi xe:*
+    - Quản lý đồng thời nhiều bãi đỗ xe.
+    - Theo dõi tình trạng bãi xe theo thời gian thực.
+    - Hỗ trợ điều khiển các chức năng của bãi xe từ xa thông qua phần mềm quản lý.
+
+- *Cho người dùng (người cần đỗ xe):*
+    - Ứng dụng di động thân thiện, tích hợp GPS.
+    - Ứng dụng AI/học máy để gợi ý các bãi đỗ gần nhất còn trống, đồng thời cân nhắc chi phí đỗ xe phù hợp.
+    - Cho phép người dùng đăng ký và giữ chỗ đỗ xe trực tuyến trước hoặc ngay khi đến bãi đỗ.
