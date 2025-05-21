@@ -55,7 +55,7 @@ Dự án "Hệ thống bãi đỗ xe tự động" được xây dựng nhằm m
 ## Hướng phát triển tương lai
 **Phần cứng:**
  - *Nâng cấp bộ xử lý trung tâm:*
-    - Thay thế ESP8266 bằng ESP32 nhằm cải thiện hiệu suất điều khiển và khả năng xử lý dữ liệu.
+    - Thay thế ESP8266 bằng ESP32 hoặc bộ xử lý mạnh hơn tuỳ vào quy mô bãi đỗ nhằm cải thiện hiệu suất điều khiển và khả năng xử lý dữ liệu.
 
 - *Mở rộng hệ thống vào/ra:*
     - Thiết kế hệ thống có 2 cổng vào và 2 cổng ra để tăng lưu lượng xe và tối ưu hóa luồng giao thông.
